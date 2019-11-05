@@ -1,23 +1,42 @@
-# # Lovelace custom card for Thermostat
+# Lovelace custom card for Thermostat
 
-A simple thermostat implemented in CSS based on <a href="https://codepen.io/dalhundal/pen/KpabZB/">Nest Thermostat Control</a> by Dal Hundal
- (<a href="https://codepen.io/dalhundal">@dalhundal</a>) on <a href="https://codepen.io">CodePen</a>
+This thermostat card is for Home Assistant Lovelace UI. 
+The aim was good loking card and not set unintentionally by scrolling the screen.
+https://github.com/au190/au190_bkk_stop
 
-![thermostat](https://user-images.githubusercontent.com/7738048/42817026-7972be8e-89d5-11e8-994f-e5f556fb46fc.png)
+#### Installation
+The easiest way to install it is through [HACS (Home Assistant Community Store)](https://custom-components.github.io/hacs/) search for the card in Plugins section.<br />
+If you are not using HACS, you may download the configuration and put it into $homeassistant_config_dir/www/community/<br />
+
 
 ### TODO
-There are many things still missing, but I'll add below those that I know of
-- [ ] Allow canceling of schedules for thermostats like Ecobee
-- [ ] Allow settings Away mode
-- [ ] Allow changing of Opration mode
-- [ ] Add support for multiple entities for different functions (zwave thermostats hot/cold, tado away mode, etc)
-- [ ] Title scaling
+- [ ] Settings can make on the default config.
+- [ ] Allow changing of Opration mode on the default config.
+- [ ] Automation for climate was writen in Node-red.
+- [ ] ⚠️ Dual mode not tested.
+
+*** How to set the GUI
+
+| Operation | Preset | Color | Icon
+| ---- | ---- | ------- | -----------
+| Off |  | black |  
+| Auto | On | Orange | auto
+|   | Idle | Grey | auto
+| Heat | On | Orange | heat 
+|   | Idle | Grey | heat
+| Cool | On | Blue | coll 
+|   | Idle | Grey | coll
+| Dry | On | Yellow | dry 
+|   | Idle | Grey | dry
+| Fan Only | On | Wgrey | fan olny 
+|   | Idle | Grey | fan olny 
+
 
 **Options**
 
 | Name | Type | Default | Description
 | ---- | ---- | ------- | -----------
-| type | string | **Required** | `custom:thermostat-card`
+| type | string | **Required** | `custom:au190-thermostat-card`
 | entity | string | **Required** | The entity id of climate entity. Example: `climate.hvac`
 | title | string | optional | Card title
 | no_card | boolean | false | Set to true to avoid the card background and use the custom element in picture-elements.
@@ -32,89 +51,171 @@ There are many things still missing, but I'll add below those that I know of
 
 
 **Example**
+Lovelace UI:<br />
+<img src='https://raw.githubusercontent.com/au190/au190_thermostat_card/master/1.png'/>
+
+
+#### yaml configuraton
 
 ```yaml
-resources:
-  - url: /local/custom-lovelace/thermostat-card/thermostat-card.js?v=1
-    type: module
-name: My Awesome Home
-views:
-  - title: Home
-    cards:
-      - type: custom:thermostat-card
-        title: Bedroom
-        entity: climate.ecobee
+climate:
+
+  - platform: mqtt
+    name: Bed room
+    #availability_topic: "bedroom/ac/availability/get"
+    
+    current_temperature_topic: "tele/s_6/CALC"
+    current_temperature_template: "{{ value_json.BMP280.Temperature }}"
+    temperature_command_topic: "bedroom/ac/temperature/set"
+
+    power_command_topic: "bedroom/ac/power/set"
+    
+    mode_command_topic: "bedroom/ac/mode/set"
+    #mode_state_topic: "bedroom/ac/mode/get"
+
+    fan_mode_command_topic: "bedroom/ac/fan/set"
+    #fan_mode_state_topic: "bedroom/ac/fan/get"
+    
+    swing_mode_command_topic: "bedroom/ac/swing/set"
+    #swing_mode_state_topic: "bedroom/ac/swing/get"
+    
+    hold_command_topic: "bedroom/ac/hold/set"
+    #hold_state_topic: "bedroom/ac/hold/get"
+    
+    initial: 5
+    retain: true
+    min_temp: 5
+    max_temp: 30
+    temp_step: 0.5
+    precision: 0.1
+    modes:
+      - "auto"
+      - "off"
+      - "heat"
+      #- "cool"
+      #- "fan_only"
+      #- "dry"
+    swing_modes:
+      - "on"
+      - "off"
+    fan_modes:
+      - "high"
+      - "medium"
+      - "low"
+      - "auto"
+    hold_modes:
+      - "On"
+      - "Idle"
+
+
+  - platform: mqtt
+    name: Living room
+    #availability_topic: "living/ac/availability/get"
+    
+    current_temperature_topic: "tele/s_3/CALC"
+    current_temperature_template: "{{ value_json.BMP280.Temperature }}"
+    temperature_command_topic: "living/ac/temperature/set"
+
+    power_command_topic: "living/ac/power/set"
+    
+    mode_command_topic: "living/ac/mode/set"
+    #mode_state_topic: "living/ac/mode/get"
+
+    fan_mode_command_topic: "living/ac/fan/set"
+    #fan_mode_state_topic: "living/ac/fan/get"
+    
+    swing_mode_command_topic: "living/ac/swing/set"
+    #swing_mode_state_topic: "living/ac/swing/get"
+    
+    hold_command_topic: "living/ac/hold/set"
+    #hold_state_topic: "living/ac/hold/get"
+    
+    initial: 5
+    retain: true
+    min_temp: 5
+    max_temp: 30
+    temp_step: 0.5
+    precision: 0.1
+    modes:
+      - "auto"
+      - "off"
+      - "heat"
+      - "cool"
+      - "fan_only"
+      - "dry"
+    swing_modes:
+      - "on"
+      - "off"
+    fan_modes:
+      - "high"
+      - "medium"
+      - "low"
+      - "auto"
+    hold_modes:
+      - "On"
+      - "Idle"
+
+
 ```
 
-**Example with custom hvac_states**
-
-```yaml
-resources:
-  - url: /local/custom-lovelace/thermostat-card/thermostat-card.js?v=1
-    type: module
-name: My Awesome Home
-views:
-  - title: Home
-    cards:
-      - type: custom:thermostat-card
-        title: Bedroom
-        entity: climate.hvac
-        chevron_size: 100
-        hvac:
-          states:
-            'Off': 'off'
-            'Cooling': 'cool'
-            'Heating': 'heat'
-          attribute: operation_mode
-```
-
-Example with external ambient sensor
-```yaml
-- type: custom:thermostat-card
-  title: Bedroom
-  entity: climate.ecobee
-  ambient_temperature: sensor.bedroom_temperature
-```
-
-⚠️ Make sure you set type to `module` when including the resource file.
-
-This Lovelace custom card displays Budapest Public Transportation (BKK)
-line information departing in the near future from a configurable stop.<p>
-This custom card depends on the BKK Stop Information custom component that you may find at
-https://github.com/au190/au190_bkk_stop
-
-
-#### Installation
-The easiest way to install it is through [HACS (Home Assistant Community Store)](https://custom-components.github.io/hacs/),
-search for <i>bkk</i> and select BKK Stop Card from Plugins.<br />
-If you are not using HACS, you may download bkk_stop_card.js and put it into $homeassistant_config_dir/www.<br />
 
 #### Lovelace UI configuration
-Add the following lines to your ui-lovelace.yaml (entity should be the sensor of bkk_stop platform you defined):
+Add the following lines to your ui-lovelace.yaml:
+
+
 ```
 resources:
-  - {type: module, url: '/www/community/au190_bkk_stop_card/au190_bkk_stop_card.js '}
+
+  - type: module
+    url: /local/community/au190_thermostat_card/au190_thermostat_card.js
+    
+cards:
+  - ambient_temperature: sensor.living_room_temp
+    entity: climate.living_room
+    small_i: true
+    title: Living room
+    type: 'custom:au190-thermostat-card'
+  - ambient_temperature: sensor.bed_room_temp
+    entity: climate.bed_room
+    small_i: true
+    title: Bed room
+    type: 'custom:au190-thermostat-card'
+type: horizontal-stack
+
+
 
 cards:
-  - entity: sensor.99_home_city
-    type: 'custom:bkk-stop-card'
-  - entity: sensor.99_vajdapeter_home
-    type: 'custom:bkk-stop-card'
-  - entity: sensor.99_blaha_home
-    type: 'custom:bkk-stop-card'
-  - entity: sensor.99_tess_home
-    type: 'custom:bkk-stop-card'
-  - entity: sensor.23_boraros_home
-    type: 'custom:bkk-stop-card'
-  - entity: sensor.23_home_city
-    type: 'custom:bkk-stop-card'
-type: vertical-stack
+  - ambient_temperature: sensor.bed_room_temp
+    chevron_size: 50
+    entity: climate.bed_room
+    highlight_tap: false
+    no_card: false
+    small_i: true
+    step: 1
+    title: Bed room
+    type: 'custom:au190-thermostat-card'
+  - ambient_temperature: sensor.living_room_temp
+    chevron_size: 50
+    entity: climate.living_room
+    highlight_tap: false
+    no_card: false
+    small_i: true
+    step: 1
+    title: Living room
+    type: 'custom:au190-thermostat-card'
+type: horizontal-stack
+
+
+
+cards:
+  - ambient_temperature: sensor.bed_room_temp
+    entity: climate.bed_room
+    title: Bed Room
+    type: 'custom:au190-thermostat-card'
+type: horizontal-stack
 ```
 
-Lovelace UI:<br />
-<img src='https://raw.githubusercontent.com/au190/au190_bkk_stop_card/master/bkk_lovelace.png'/>
+
 
 ## Credits
-[@silasb](https://github.com/silasb)
-[@ciotlosm](https://github.com/ciotlosm)
-Original: https://github.com/ciotlosm/custom-lovelace/tree/master/thermostat-card
+Inspired by: https://github.com/ciotlosm/custom-lovelace/tree/master/thermostat-card

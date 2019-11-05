@@ -1,5 +1,5 @@
 import {cssData} from './styles.js?v=0.1.1';
-import ThermostatUI from './thermostat-card.lib.js?v=0.1.1'
+import ThermostatUI from './thermostat_card.lib.js?v=0.1.1'
 
 class ThermostatCard extends HTMLElement {
   constructor() {
@@ -137,4 +137,4 @@ class ThermostatCard extends HTMLElement {
     this._config = cardConfig;
   }
 }
-customElements.define('thermostat-card', ThermostatCard);
+customElements.define('au190-thermostat-card', ThermostatCard);

@@ -87,9 +87,10 @@ ha-card {
 .c_icon{
   position: absolute;
   cursor: pointer;
-  top: 0;
-  right: 0;
+  top: 5px;
+  right: 5px;
   z-index: 25;
+  color: #808080;
 }
 .climate_info {
   position: absolute;
@@ -105,10 +106,10 @@ ha-card {
   left: 50%;
   transform: translate(-50%, -50%);
 }
-.modes iron-icon {
+.modes ha-icon {
   color: var(--mode_color);
-  --iron-icon-height: var(--icon_size);
-  --iron-icon-width: var(--icon_size);
+  --ha-icon-height: var(--icon_size);
+  --ha-icon-width: var(--icon_size);
 }
 
 .dot_r{

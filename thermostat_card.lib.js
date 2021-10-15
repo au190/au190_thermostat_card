@@ -378,7 +378,7 @@ export default class ThermostatUI {
   _buildTitle(title) {
     this._ic = document.createElement('div');
     this._ic.innerHTML = `
-      <paper-icon-button icon="hass:dots-vertical" class="c_icon" role="button" tabindex="0" aria-disabled="false"></paper-icon-button>
+      <ha-icon icon="mdi:dots-vertical" class="c_icon" role="button" tabindex="0" aria-disabled="false"></ha-icon>
     `;
     this._container.innerHTML = `
       <div class="c_title">
@@ -397,7 +397,7 @@ export default class ThermostatUI {
     this._main_icon.innerHTML = `
       <div class="climate_info">
         <div class="mode_color"><span class="${ic_dot}"></span></div>
-        <div class="modes"><iron-icon class="${state}" icon="mdi:${ic_name}"></iron-icon></div>
+        <div class="modes"><ha-icon class="${state}" icon="mdi:${ic_name}"></ha-icon></div>
       </div>
     `;
     return this._main_icon;
